@@ -1,7 +1,7 @@
 ﻿
 # Setting up a Real-Time Transcription business server
 
-Real-Time Transcription (RTT) takes the audio content of a host's media stream and transcribes it into written words in real time. This Java project demonstrates you to set up a business server that your client uses to start and stop Real-Time Transcription tasks.
+Real-Time Transcription (RTT) takes the audio content of a host's media stream and transcribes it into written words in real time. This Java project demonstrates how to set up a business server that your client uses to start and stop Real-Time Transcription tasks.
 
 ## Understand the tech
 
@@ -16,22 +16,21 @@ The following figure shows the workflow to start, query, and stop a Real-Time Tr
 
 ![Real-Time Transcription business server](https://docs-git-milestone37-speech-to-text-Agora-gdxe.vercel.app/en/assets/images/real-time-transcription-server-07d073102bebc8cf0f41e6985efc56b1.svg)
 
-In order to use the RESTful API to transcribe speech, you make the following calls:
+In order to use the RESTful API to transcribe speech, your server make the following calls:
 
-1. `acquire`: Request a `builderToken` that authenticates the user and gives permission to start Real-Time Transcription . You must call
-`start` using this `builderToken` within five minutes.
-1. `start`: Begin the transcription task. Once you start a task, `builderToken` remains valid for the entire
-session. Use the same `builderToken` to query and stop the task.
+1. `acquire`: Request a `builderToken` that authenticates the user and gives permission to start Real-Time Transcription . You must call `start` using this `builderToken` within five minutes.
+1. `start`: Begin the transcription task. Once you start a task, `builderToken` remains valid for the entire session. Use the same `builderToken` to query and stop the task.
 1. `query`: Check the task status.
 1. `stop`: Stop the transcription task.
 
 ## Prerequisites
 
-In order to set up Real-Time Transcription in your app, you must have:
+In order to set up a demo Real-Time Transcription business server, you must have:
 
 * Java Development Kit (JDK) 1.8 or higher.
+* Installed [git](https://git-scm.com/downloads) on your development machine.
 * Installed [Maven](https://maven.apache.org/download.cgi) on your system.
-* An Integrated Development Environment (IDE) configured to work with java projects. 
+* An Integrated Development Environment (IDE) configured to work with Maven Java projects. 
 * [Curl](https://curl.se/download.html) for testing your server implementation.
 * Enabled Real-Time Transcription for your project. Contact sales@Agora.io
 * Activated a [supported cloud storage service](#supported-third-party-cloud-storage-services) to record and store Real-Time Transcription texts.
@@ -48,9 +47,9 @@ Implementing a business server to manage Real-Time Transcription provides the fo
 user privileges and payment status of a user.
 * If the REST API is updated, you do not need to update the client.
 
-### Build and run the business server
+### Build and run the demo business server
 
-To set up the sample Real-time Transcription business server, take the following steps:
+To set up the demo Real-time Transcription business server, take the following steps:
 
 1. **Download the Git repository**
 
@@ -60,9 +59,9 @@ To set up the sample Real-time Transcription business server, take the following
     git clone https://github.com/saudsami/agora-rtt-server <your download directory>
     ```
 
-1. **Update the connection variables**
+1. **Specify connection variables**
 
-    Open the file `src\main\java\rtt\RttTask.java` and update the values for `appId`, `appCertificate`, `customerId`, and `customerSecret` from [Agora Console](https://console.agora.io/).
+    Open the `agora-rtt-server\src\main\java\rtt\RttTask.java` file and update the values for `appId`, `appCertificate`, `customerId`, and `customerSecret` from [Agora Console](https://console.agora.io/). Also specify the `ossAccessKey`, `ossSecretKey`, and the `ossBucketName` to configure cloud storage.
 
 1. **Build the server project**
 

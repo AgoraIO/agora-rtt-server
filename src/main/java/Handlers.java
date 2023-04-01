@@ -52,20 +52,21 @@ public class Handlers {
 
 		@Override
 		public void handle(HttpExchange he) throws IOException {
+			// Read JSON body
 			JSONObject jsonObj = getBodyJSON(he);
-			// Configure real-time transcription
-			RttTask rttTask = new RttTask();
-			rttTask.channelName = (String) jsonObj.get("channelName");
-			rttTask.instanceId = "rtt" + rttTask.channelName;
-
-			// Identify the user sending the request
+			String channelName = (String) jsonObj.get("channelName");
 			int UserId = Integer.valueOf(jsonObj.get("UserId").toString()); 
+
 			// Add code here to check user privileges and payment options
-			// If everything is OK, get a builderToken to start real-time transcription
+			// If everything is OK, create and configure an RTT task
+			RttTask rttTask = new RttTask(UserId, channelName);
+			// Start the task
 			RttResult result = rttTask.startTranscription(); 
+			// Store the task in a list for later actions
 			if (result == RttResult.SUCCESS) taskList.addTask(rttTask);
 
-			String response = rttTask.status;
+			// Returned the task status in response
+			String response = rttTask.status; 
 			int responseCode = (result == RttResult.SUCCESS) ? 200 : 500;
 			he.sendResponseHeaders(responseCode, response.length());
 			OutputStream os = he.getResponseBody();
@@ -78,12 +79,15 @@ public class Handlers {
 
 		@Override
 		public void handle(HttpExchange he) throws IOException {
+			// Read JSON body
 			JSONObject jsonObj = getBodyJSON(he);
 			String channelName = (String) jsonObj.get("channelName");
-
+			
+			// Retrieve the task for this channelName
 			RttTask rttTask = taskList.getTask(channelName);
 			RttResult result = rttTask.stopTranscription();
 
+			// Returned the task status in response
 			String response = rttTask.status;
 			int responseCode = (result == RttResult.SUCCESS) ? 200 : 500;
 			he.sendResponseHeaders(responseCode, response.length());
@@ -97,12 +101,15 @@ public class Handlers {
 
 		@Override
 		public void handle(HttpExchange he) throws IOException {
+			// Read JSON body
 			JSONObject jsonObj = getBodyJSON(he);
 			String channelName = (String) jsonObj.get("channelName");
 
+			// Retrieve the task for this channelName
 			RttTask rttTask = taskList.getTask(channelName);
 			RttResult result = rttTask.queryTask();
 
+			// Returned the task status in response
 			String response = rttTask.status;
 			int responseCode = (result == RttResult.SUCCESS) ? 200 : 500;
 			he.sendResponseHeaders(responseCode, response.length());

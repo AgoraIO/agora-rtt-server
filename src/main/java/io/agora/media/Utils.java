@@ -6,7 +6,6 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Base64;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;

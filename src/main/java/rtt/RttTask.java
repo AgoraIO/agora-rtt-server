@@ -15,22 +15,37 @@ import org.json.JSONObject;
 import java.util.Base64;
 
 public class RttTask {
-    static final String appId = "9d2498880e934632b38b0a68fa2f1622"; // "<your app ID from Agora console>";
-    static final String appCertificate = "19c00334556448c79615cf35d53f8438"; // "<your app certificate from Agora  console>";
-    static final String customerId = "9312f615635a47b9a15fd6d1719ef13f"; // "<your customer ID from Agora console>";
-    static final String customerSecret = "b5d6a5f4b9734a338b82d2a0b4ae4495"; // "<your customer secret from Agora console>";
-    static final String baseUrl = "https://api.agora.io";
-    static final String authorizationHeader = "Basic " + new String(Base64.getEncoder()
-            .encode((customerId + ":" + customerSecret).getBytes()));;
-
-    public String channelName, tokenAudio, tokenText, builderToken, instanceId, status;
-    public String language = "en-US", taskId = "";
-    public int uidAudio = 111, uidText = 222;
-    public int maxIdleTime = 120;
+    static final String appId = "9d2498880e934632b38b0a68fa2f1622"; 
+    static final String appCertificate = "19c00334556448c79615cf35d53f8438"; 
+    static final String customerId = "9312f615635a47b9a15fd6d1719ef13f"; 
+    static final String customerSecret = "b5d6a5f4b9734a338b82d2a0b4ae4495"; 
+    /* 
+    private static final String appId = "<your app ID from Agora console>";
+    private static final String appCertificate = "<your app certificate from Agora  console>";
+    private static final String customerId = "<your customer ID from Agora console>";
+    private static final String customerSecret = "<your customer secret from Agora console>";
+    */
     // Cloud storage parameters
-    public String ossSecretKey = "";
-    public String ossAccessKey = "";
-    public String ossBucketName = "";
+    private String ossSecretKey = "<Your oss secret key>";
+    private String ossAccessKey = "<Your oss access key>";
+    private String ossBucketName = "<Your oss bucket name>";
+    private static final String baseUrl = "https://api.agora.io";
+
+    private static final String authorizationHeader = "Basic " + new String(Base64.getEncoder()
+            .encode((customerId + ":" + customerSecret).getBytes()));;
+    
+    public String channelName, status;
+    public String language = "en-US", taskId = "";
+    public int userId, maxIdleTime = 120;
+
+    private String tokenAudio, tokenText, builderToken, instanceId;
+    private int uidAudio = 111, uidText = 222;
+    
+    public RttTask(int userId, String channelName) {
+        this.userId = userId;
+        this.channelName = channelName;
+        instanceId = channelName;
+    }
 
     private RttResult getBuilderToken() throws IOException {
         String url = baseUrl + "/v1/projects/" + appId + "/rtsc/speech-to-text/builderTokens";
@@ -105,9 +120,9 @@ public class RttTask {
                                                         .put("format", "HLS")
                                                         .put("storageConfig",
                                                                 new JSONObject()
-                                                                        .put("accessKey", "<YourOssAccessKey>")
+                                                                        .put("accessKey", ossAccessKey)
                                                                         .put("secretKey", ossSecretKey)
-                                                                        .put("bucket", "<YourOssBucketName>")
+                                                                        .put("bucket", ossBucketName)
                                                                         .put("vendor", 1) // Your Oss Vendor
                                                                         .put("region", 1) // Your Oss Region
                                                                         .put("fileNamePrefix",
