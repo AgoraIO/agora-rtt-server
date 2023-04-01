@@ -93,7 +93,7 @@ To test your business server, take the following steps:
     * `UserId`: The parameter identifies the user starting the RTT task, so that the business server may check user's privileges and payment status.
     * `channelName`: The channel for which the RTT task is to be started.
 
-    You see a message in the terminal confirming that the RTT task was started successfully. You also see a confirmation message displayed in the server terminal with the channel name and task ID.
+    You see a message in the terminal confirming that the RTT task was started successfully. You also see a confirmation message displayed in the server console with the channel name and task ID.
 
     
 1. To query the status of an RTT task, execute the following command in a terminal window:
@@ -109,7 +109,7 @@ To test your business server, take the following steps:
     curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" http://localhost:80/rttStop
     ```
 
-     Your server retrieves the task ID and builder token for the task associated with the `channelName` specified in the request and sends a request to stop the task. You see a confirmation message displayed in the terminal.
+     Your server retrieves the task ID and builder token for the task associated with the `channelName` and sends a request to stop the task. You see a confirmation message displayed in the terminal.
 
 
 ## Reference
