@@ -5,7 +5,7 @@ import com.sun.net.httpserver.HttpServer;
 public class Main {
 	public static int port = 80;
 	public static void main(String[] args) {
-		// start http server
+		// Start the http server
 		SimpleHttpServer httpServer = new SimpleHttpServer();
 		httpServer.Start(port);
 	}
@@ -18,6 +18,7 @@ public class Main {
 				server = HttpServer.create(new InetSocketAddress(port), 0);
 				System.out.println("RTT server started on port " + port);
 				server.createContext("/", new Handlers.RootHandler());
+				// Specify handlers for the Start, Query and Stop requests
 				server.createContext("/rttStart", new Handlers.StartHandler());
 				server.createContext("/rttQuery", new Handlers.QueryHandler());
 				server.createContext("/rttStop", new Handlers.StopHandler());

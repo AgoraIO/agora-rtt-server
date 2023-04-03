@@ -18,6 +18,7 @@ public class Handlers {
 	static TaskList taskList = new TaskList();
 
 	private static JSONObject getBodyJSON(HttpExchange he) {
+		// Reads the request body and returns it as a JSONObject
 		InputStreamReader isr;
 		try {
 			isr = new InputStreamReader(he.getRequestBody(), "utf-8");
@@ -39,6 +40,7 @@ public class Handlers {
 
 		@Override
 		public void handle(HttpExchange he) throws IOException {
+			// Handles requests sent to http://localhost:<port>
 			String response = "<h1>Agora RTT Server Demo</h1>" + "<h2>Port: "
 					+ Main.port + "</h2>";
 			he.sendResponseHeaders(200, response.length());
@@ -58,11 +60,12 @@ public class Handlers {
 			int UserId = Integer.valueOf(jsonObj.get("UserId").toString()); 
 
 			// Add code here to check user privileges and payment options
+
 			// If everything is OK, create and configure an RTT task
 			RttTask rttTask = new RttTask(UserId, channelName);
 			// Start the task
 			RttResult result = rttTask.startTranscription(); 
-			// Store the task in a list for later actions
+			// Store the task in a task list for later actions
 			if (result == RttResult.SUCCESS) taskList.addTask(rttTask);
 
 			// Returned the task status in response
@@ -85,6 +88,7 @@ public class Handlers {
 			
 			// Retrieve the task for this channelName
 			RttTask rttTask = taskList.getTask(channelName);
+			// Stop the transcription task
 			RttResult result = rttTask.stopTranscription();
 
 			// Returned the task status in response
@@ -107,6 +111,7 @@ public class Handlers {
 
 			// Retrieve the task for this channelName
 			RttTask rttTask = taskList.getTask(channelName);
+			// Query the task
 			RttResult result = rttTask.queryTask();
 
 			// Returned the task status in response

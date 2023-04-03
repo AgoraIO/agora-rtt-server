@@ -1,6 +1,7 @@
 package rtt;
 
 public enum RttResult {
+    // Internal return codes to intimate success or failure
     SUCCESS(0, "Success"),
     FAILED_TO_FETCH_BUILDER_TOKEN(1, "Failed to fetch builderToken"),
     FAILED_TO_START_TASK(2, "Failed to start RTT task "),

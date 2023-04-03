@@ -15,45 +15,52 @@ import org.json.JSONObject;
 import java.util.Base64;
 
 public class RttTask {
-    static final String appId = "9d2498880e934632b38b0a68fa2f1622"; 
-    static final String appCertificate = "19c00334556448c79615cf35d53f8438"; 
-    static final String customerId = "9312f615635a47b9a15fd6d1719ef13f"; 
-    static final String customerSecret = "b5d6a5f4b9734a338b82d2a0b4ae4495"; 
-    /* 
+
+    // Agora ID and security parameters
     private static final String appId = "<your app ID from Agora console>";
     private static final String appCertificate = "<your app certificate from Agora  console>";
     private static final String customerId = "<your customer ID from Agora console>";
     private static final String customerSecret = "<your customer secret from Agora console>";
-    */
+
     // Cloud storage parameters
     private String ossSecretKey = "<Your oss secret key>";
     private String ossAccessKey = "<Your oss access key>";
     private String ossBucketName = "<Your oss bucket name>";
     private static final String baseUrl = "https://api.agora.io";
-
+    // Authorization header for HTTP requests
     private static final String authorizationHeader = "Basic " + new String(Base64.getEncoder()
             .encode((customerId + ":" + customerSecret).getBytes()));;
     
-    public String channelName, status;
-    public String language = "en-US", taskId = "";
-    public int userId, maxIdleTime = 120;
+    public String channelName; // The channel for the RTT task
+    public String status; // Holds the last status returned
+    public String language = "en-US"; // Max 2 simultaneous languages are supported, separated by a comma.
+    public String taskId = ""; // Holds the ID of the RTT task
+    public int userId; // Identifies the user who sent the start request
+    public int maxIdleTime = 120; // If there is no activity of this time, the task stops automatically.
 
-    private String tokenAudio, tokenText, builderToken, instanceId;
-    private int uidAudio = 111, uidText = 222;
+    // Unique uids to access the audio in the channel, and send the text
+    private int uidAudio = 111, uidText = 222; 
+    private String tokenAudio, tokenText; // Tokens corresponding to the audio and text uids
+
+    private String builderToken; // The builder token required to send start, query and stop requests
+    private String instanceId; // A string that identifies the RTT task
     
     public RttTask(int userId, String channelName) {
         this.userId = userId;
         this.channelName = channelName;
-        instanceId = channelName;
+        // InstanceId can be any unique string, best practice is to set it to the channel name.
+        instanceId = channelName; 
     }
 
     private RttResult getBuilderToken() throws IOException {
+        // Build the request endpoint url
         String url = baseUrl + "/v1/projects/" + appId + "/rtsc/speech-to-text/builderTokens";
 
         MediaType mediaType = MediaType.parse("application/json");
-
+        // Specify the instanceID in the request body
         RequestBody body = RequestBody.create("{\n \"instanceId\" : \""
                 + instanceId + "\" \n}", mediaType);
+        // Send an HTTP POST request
         Request request = new Request.Builder()
                 .addHeader("Authorization", authorizationHeader)
                 .url(url)
@@ -65,20 +72,23 @@ public class RttTask {
             String result = response.body().string();
             JSONObject jsonObject = new JSONObject(result);
             if (response.isSuccessful()) {
+                // Save the builder token and return Success
                 builderToken = jsonObject.getString("tokenName");
                 return RttResult.SUCCESS;
             } else {
+                // Failed to fetch a builder token
                 status = jsonObject.getString("message");
-                System.out.println("builderToken not received: " + status);
+                System.out.println("builder token not received: " + status);
                 return RttResult.FAILED_TO_FETCH_BUILDER_TOKEN;
             }
         }
     }
 
     public RttResult startTranscription() throws JSONException, IOException {
-        // Get builderToken
+        // Get a builderToken
         getBuilderToken();
 
+        // Build the request endpoint url
         String url = baseUrl + "/v1/projects/" + appId
                 + "/rtsc/speech-to-text/tasks?" + "builderToken=" + builderToken;
 
@@ -86,24 +96,24 @@ public class RttTask {
         tokenAudio = TokenBuilder.getToken(appId, appCertificate, channelName, uidAudio, 3600);
         tokenText = TokenBuilder.getToken(appId, appCertificate, channelName, uidText, 3600);
 
-        // Build Request body JSON
+        // Build HTTP Request body JSON
         JSONObject startConfig = new JSONObject()
                 .put("audio", new JSONObject()
-                        .put("subscribeSource", "AGORARTC")
-                        .put("agoraRtcConfig", new JSONObject()
-                                .put("channelName", channelName)
-                                .put("uid", String.valueOf(uidAudio))
-                                .put("token", tokenAudio)
-                                .put("channelType", "LIVE_TYPE")
+                        .put("subscribeSource", "AGORARTC") // Currently fixed
+                        .put("agoraRtcConfig", new JSONObject() 
+                                .put("channelName", channelName) // Name of the channel for RTT 
+                                .put("uid", String.valueOf(uidAudio)) // Uid used by the audio streaming bot. Must be an integer specified as a string. For example "111"
+                                .put("token", tokenAudio) // RTC token for the audio uid
+                                .put("channelType", "LIVE_TYPE") // Currently fixed
                                 .put("subscribeConfig", new JSONObject()
-                                        .put("subscribeMode", "CHANNEL_MODE"))
-                                .put("maxIdleTime", maxIdleTime)))
+                                        .put("subscribeMode", "CHANNEL_MODE")) // Currently fixed
+                                .put("maxIdleTime", maxIdleTime))) // If there is no audio stream in the channel for more than this time, the RTT task stops automatically
                 .put("config", new JSONObject()
                         .put("features", new JSONArray()
-                                .put("RECOGNIZE"))
+                                .put("RECOGNIZE")) // Currently fixed
                         .put("recognizeConfig", new JSONObject()
-                                .put("language", language)
-                                .put("model", "Model")
+                                .put("language", language) // Supports at most two language codes separated by commas. 
+                                .put("model", "Model") // Currently fixed
                                 .put("output", new JSONObject()
                                         .put("destinations", new JSONArray()
                                                 .put("AgoraRTCDataStream")

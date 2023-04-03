@@ -3,7 +3,7 @@ package rtt;
 import java.util.HashMap;
 
 public class TaskList {
-
+    // A class to store and retrieve RTT tasks started using the server
     private HashMap<String, RttTask> tasks = new HashMap<>();
 
     public void addTask(RttTask task) {
