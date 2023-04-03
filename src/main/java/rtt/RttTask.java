@@ -92,7 +92,7 @@ public class RttTask {
         String url = baseUrl + "/v1/projects/" + appId
                 + "/rtsc/speech-to-text/tasks?" + "builderToken=" + builderToken;
 
-        // Get and set RTC tokens
+        // Get two RTC tokens
         tokenAudio = TokenBuilder.getToken(appId, appCertificate, channelName, uidAudio, 3600);
         tokenText = TokenBuilder.getToken(appId, appCertificate, channelName, uidText, 3600);
 
@@ -112,7 +112,7 @@ public class RttTask {
                         .put("features", new JSONArray()
                                 .put("RECOGNIZE")) // Currently fixed
                         .put("recognizeConfig", new JSONObject()
-                                .put("language", language) // Supports at most two language codes separated by commas. 
+                                .put("language", language) // Supports at most two language codes separated by commas. For example, "en-US,ja-JP"
                                 .put("model", "Model") // Currently fixed
                                 .put("output", new JSONObject()
                                         .put("destinations", new JSONArray()
@@ -120,46 +120,46 @@ public class RttTask {
                                                 .put("Storage"))
                                         .put("agoraRTCDataStream",
                                                 new JSONObject()
-                                                        .put("channelName",
-                                                                channelName)
-                                                        .put("uid", String
-                                                                .valueOf(uidText))
-                                                        .put("token", tokenText))
+                                                        .put("channelName", channelName) // Name of the channel for RTT 
+                                                        .put("uid", String.valueOf(uidText)) // Uid used for text streaming. Must be a unique integer specified as a string. For example "222"
+                                                        .put("token", tokenText)) // RTC token for the text uid
                                         .put("cloudStorage", new JSONArray()
                                                 .put(new JSONObject()
-                                                        .put("format", "HLS")
+                                                        .put("format", "HLS") // Currently fixed
                                                         .put("storageConfig",
                                                                 new JSONObject()
-                                                                        .put("accessKey", ossAccessKey)
-                                                                        .put("secretKey", ossSecretKey)
-                                                                        .put("bucket", ossBucketName)
-                                                                        .put("vendor", 1) // Your Oss Vendor
-                                                                        .put("region", 1) // Your Oss Region
+                                                                        .put("accessKey", ossAccessKey) // Access key of oss
+                                                                        .put("secretKey", ossSecretKey) // Secret key of oss
+                                                                        .put("bucket", ossBucketName) // Oss bucket name
+                                                                        .put("vendor", 1) // Your Oss Vendor ID
+                                                                        .put("region", 1) // Your Oss Region ID
                                                                         .put("fileNamePrefix",
-                                                                                new JSONArray()
-                                                                                        .put("directory1")
-                                                                                        .put("directory2"))))))));
+                                                                                new JSONArray() // An array of directory strings to append to storage files
+                                                                                        .put("folder")
+                                                                                        .put("subFolder"))))))));
 
         MediaType mediaType = MediaType.parse("application/json");
+        // Set the request body
         RequestBody body = RequestBody.create(startConfig.toString(), mediaType);
         Request request = new Request.Builder()
-                .addHeader("Authorization", authorizationHeader)
+                .addHeader("Authorization", authorizationHeader) // Set the request header
                 .url(url)
                 .method("POST", body)
                 .build();
-
+        // Send a POST request
         OkHttpClient client = new OkHttpClient();
         try (Response response = client.newCall(request).execute()) {
             String result = response.body().string();
             if (response.isSuccessful()) {
                 try {
+                    // Read the status and task ID from the response 
                     JSONObject jsonObject = new JSONObject(result);
                     status = jsonObject.getString("status");
                     taskId = jsonObject.getString("taskId");
                     if (status.equals("IN_PROGRESS") || status.equals("STARTED")) {
                         System.out.println(
-                                "RTT task started for channel: " + channelName + " ID: "
-                                        + taskId);
+                                "RTT task started for channel: " + channelName + " ID: " + taskId);
+                        // Confirm success
                         return RttResult.SUCCESS;
                     } else {
                         System.out.println("RTT task status: " + status);
@@ -175,10 +175,12 @@ public class RttTask {
     }
 
     public RttResult stopTranscription() {
+        // Build the request endpoint url
         String url = baseUrl + "/v1/projects/" + appId
                 + "/rtsc/speech-to-text/tasks/" + taskId
                 + "?builderToken=" + builderToken;
-        // MediaType mediaType = MediaType.parse("application/json");
+
+        // Send a DELETE request
         Request request = new Request.Builder()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", authorizationHeader)
@@ -206,10 +208,12 @@ public class RttTask {
     }
 
     public RttResult queryTask() {
+        // Build the request endpoint url
         String url = baseUrl + "/v1/projects/" + appId
                 + "/rtsc/speech-to-text/tasks/" + taskId
                 + "?builderToken=" + builderToken;
 
+        // Send a GET request
         Request request = new Request.Builder()
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", authorizationHeader)
@@ -225,6 +229,7 @@ public class RttTask {
             JSONObject jsonObject = new JSONObject(result);
             if (response.isSuccessful()) {
                 status = jsonObject.getString("status");
+                // Confirm Success
                 return RttResult.SUCCESS;
             } else {
                 status = jsonObject.getString("message");
