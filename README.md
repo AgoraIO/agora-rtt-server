@@ -1,7 +1,9 @@
 ﻿
-# Setting up a Real-Time Transcription business server
+# Real-Time Transcription business server demo
 
-Real-Time Transcription (RTT) takes the audio content of a host's media stream and transcribes it into written words in real time. This Java project demonstrates how to set up a business server that your client uses to start and stop Real-Time Transcription tasks.
+Real-Time Transcription (RTT) takes the audio content of a host's media stream and transcribes it into written words 
+in real time. This Java project demonstrates how to set up a business server that your app uses to start and stop 
+Real-Time Transcription tasks.
 
 ## Understand the tech
 
@@ -16,7 +18,7 @@ The following figure shows the workflow to start, query, and stop a Real-Time Tr
 
 ![Real-Time Transcription business server](https://docs-git-milestone37-speech-to-text-Agora-gdxe.vercel.app/en/assets/images/real-time-transcription-server-07d073102bebc8cf0f41e6985efc56b1.svg)
 
-In order to use the RESTful API to transcribe speech, your server make the following calls:
+To use the RESTful API to transcribe speech, your server makes the following calls:
 
 1. `acquire`: Request a `builderToken` that authenticates the user and gives permission to start Real-Time Transcription . You must call `start` using this `builderToken` within five minutes.
 1. `start`: Begin the transcription task. Once you start a task, `builderToken` remains valid for the entire session. Use the same `builderToken` to query and stop the task.
@@ -37,35 +39,38 @@ In order to set up a demo Real-Time Transcription business server, you must have
 
 ## Implement a business server
 
-You create a business server as a bridge between your app and Agora Real-Time Transcription.
-Implementing a business server to manage Real-Time Transcription provides the following benefits:
+You create a business server as a bridge between your app and Agora Real-Time Transcription. Implementing this business 
+server provides the following benefits:
 
 * Improved security as your `apiKey`, `apiSecret`, `builderToken`, and `taskId`, are not exposed to the client.
 * Token processing is securely handled on the business server.
 * Avoid splicing complex request body strings on the client side to reduce the probability of errors.
-* Implement additional functionality on the business server. For example, billing for  Real-Time Transcription use, checking
-user privileges and payment status of a user.
+* Implement additional functionality on the business server. For example: 
+   * Billing for  Real-Time Transcription 
+   * Checking user privileges and the payment status of a user
 * If the REST API is updated, you do not need to update the client.
 
 ### Build and run the demo business server
 
-To set up the demo Real-time Transcription business server, take the following steps:
+To set up the demo Real-time Transcription business server, do the following:
 
 1. **Download the Git repository**
 
     Clone the `agora-rtt-server` repository to your development device using the following command:
 
     ```bash
-    git clone https://github.com/saudsami/agora-rtt-server <your download directory>
+    git clone https://github.com/AgoraIO/agora-rtt-server.git <your download directory>
     ```
 
 1. **Specify connection variables**
 
-    Open the `agora-rtt-server\src\main\java\rtt\RttTask.java` file and update the values for `appId`, `appCertificate`, `customerId`, and `customerSecret` from [Agora Console](https://console.agora.io/). Also specify the `ossAccessKey`, `ossSecretKey`, and the `ossBucketName` to configure cloud storage.
+    1. Open `agora-rtt-server\src\main\java\rtt\RttTask.java` and update the values for `appId`, `appCertificate`, 
+   `customerId`, and `customerSecret` from [Agora Console](https://console.agora.io/). 
+    1. Specify the `ossAccessKey`, `ossSecretKey`, and the `ossBucketName` to configure cloud storage.
 
 1. **Build the server project**
 
-    Execute the following command in the terminal to download the dependencies and initiate the Maven build process:
+   To download the dependencies and initiate the Maven build process, execute the following command in the terminal :
 
     ```bash
     mvn clean install
@@ -73,7 +78,7 @@ To set up the demo Real-time Transcription business server, take the following s
 
 1. **Start the server**
 
-    In your IDE, **Start debugging** to launch the server. You see the following message in the terminal:
+    In your IDE, click **Start debugging** to launch the server. You see the following message in the terminal:
 
     ```
     RTT server started on port 80
@@ -83,27 +88,34 @@ To set up the demo Real-time Transcription business server, take the following s
 
 To test your business server, take the following steps:
 
-1. To start an RTT task, execute the following command in a terminal window:
+1. Start an RTT task.
+
+    Execute the following command in a terminal window:
 
     ```bash
     curl -X POST -H "Content-Type: application/json" -d "{\"UserId\": \"123\", \"channelName\": \"demo\"}" http://localhost:80/rttStart
     ```
 
-    The command makes an HTTP request to your RTT server with a JSON body. The body contains the following parameters:
+    The command makes an HTTP request to RTT within the JSON body. The body contains the following parameters:
     * `UserId`: The parameter identifies the user starting the RTT task, so that the business server may check user's privileges and payment status.
     * `channelName`: The channel for which the RTT task is to be started.
 
     You see a message in the terminal confirming that the RTT task was started successfully. You also see a confirmation message displayed in the server console with the channel name and task ID.
 
     
-1. To query the status of an RTT task, execute the following command in a terminal window:
+1. Query the status of an RTT task.
+
+   Execute the following command in a terminal window:
 
     ```bash
     curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" http://localhost:80/rttQuery
     ```
     Your server retrieves the task ID and builder token for the task associated with the `channelName` specified in the request and sends a request to query the task status. You see the retrieved status displayed in the terminal.
 
-1. To stop an RTT task, execute the following command in a terminal window:
+1. Stop the RTT task.
+
+   Execute the following command in a terminal window:
+
 
     ```bash
     curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" http://localhost:80/rttStop
