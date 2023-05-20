@@ -17,15 +17,15 @@ import java.util.Base64;
 public class RttTask {
 
     // Agora ID and security parameters
-    private static final String appId = "<your app ID from Agora console>";
-    private static final String appCertificate = "<your app certificate from Agora  console>";
-    private static final String customerId = "<your customer ID from Agora console>";
-    private static final String customerSecret = "<your customer secret from Agora console>";
+    private static final String appId = System.getenv("APP_ID"); // "9d2498880e934632b38b0a68fa2f1622";
+    private static final String appCertificate = System.getenv("APP_CERTIFICATE"); // "19c00334556448c79615cf35d53f8438";
+    private static final String customerId = System.getenv("CUSTOMER_ID"); //"9312f615635a47b9a15fd6d1719ef13f";
+    private static final String customerSecret = System.getenv("CUSTOMER_SECRET"); // "b5d6a5f4b9734a338b82d2a0b4ae4495";
 
     // Cloud storage parameters
-    private String ossSecretKey = "<Your oss secret key>";
-    private String ossAccessKey = "<Your oss access key>";
-    private String ossBucketName = "<Your oss bucket name>";
+    private String ossSecretKey = System.getenv("OSS_SECRET_KEY"); //"<Your oss secret key>";
+    private String ossAccessKey = System.getenv("OSS_ACCESS_KEY");//"<Your oss access key>";
+    private String ossBucketName = System.getenv("OSS_BUCKET_NAME"); //"<Your oss bucket name>";
     private static final String baseUrl = "https://api.agora.io";
     // Authorization header for HTTP requests
     private static final String authorizationHeader = "Basic " + new String(Base64.getEncoder()
