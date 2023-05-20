@@ -1,4 +1,4 @@
-package rtt;
+package io.agora.rtt;
 
 public enum RttResult {
     // Internal return codes to intimate success or failure

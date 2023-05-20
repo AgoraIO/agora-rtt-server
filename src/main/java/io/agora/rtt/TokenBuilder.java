@@ -1,4 +1,4 @@
-package rtt;
+package io.agora.rtt;
 import io.agora.media.RtcTokenBuilder;
 import io.agora.media.RtcTokenBuilder.Role;
 

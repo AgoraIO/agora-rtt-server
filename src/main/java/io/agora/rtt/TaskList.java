@@ -1,4 +1,4 @@
-package rtt;
+package io.agora.rtt;
 
 import java.util.HashMap;
 

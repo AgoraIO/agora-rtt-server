@@ -1,3 +1,4 @@
+package io.agora.rtt;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,10 +10,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import org.json.JSONObject;
-
-import rtt.TaskList;
-import rtt.RttResult;
-import rtt.RttTask;
 
 public class Handlers {
 	static TaskList taskList = new TaskList();
