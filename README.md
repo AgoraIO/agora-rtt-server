@@ -1,9 +1,7 @@
 ﻿
 # Real-Time Transcription business server demo
 
-Real-Time Transcription (RTT) takes the audio content of a host's media stream and transcribes it into written words 
-in real time. This Java project demonstrates how to set up a business server that your app uses to start and stop 
-Real-Time Transcription tasks.
+Real-Time Transcription (RTT) takes the audio content of a host's media stream and transcribes it into written words in real time. This Java project demonstrates how to set up a business server that your app uses to start and stop Real-Time Transcription tasks.
 
 ## Understand the tech
 
@@ -49,6 +47,22 @@ server provides the following benefits:
    * Billing for  Real-Time Transcription 
    * Checking user privileges and the payment status of a user
 * If the REST API is updated, you do not need to update the client.
+
+
+### One-click deployment on railway
+
+To quickly deploy the RTT demo server on Railway, you will need a [Railway](https://railway.app/) account verified through your github account. To start the deployment, click the following button and follow these steps:
+
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/w9wI4Q?referralCode=NwYPaQ)
+
+1. Click on **Deploy Now**. You see a configuration form.
+
+1. Fill in the `APP_ID`, `APP_CERTIFICATE`, `CUSTOMER_ID`, `CUSTOMER_SECRET`. 
+
+1. To specify your Object storage service (OSS), fill in the values for `OSS_ACCESS_KEY`, `OSS_SECRET_KEY`, and `OSS_BUCKET_NAME`.
+
+1. To complete the deployment, click **Deploy**.
+
 
 ### Build and run the demo business server
 
