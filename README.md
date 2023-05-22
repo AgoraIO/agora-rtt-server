@@ -25,7 +25,9 @@ To use the RESTful API to transcribe speech, your server makes the following cal
 
 ## Prerequisites
 
-In order to set up a demo Real-Time Transcription business server, you must have:
+In order to deploy a demo Real-Time Transcription business server on [Railway](railway.app), you must have a [Railway](https://railway.app/) account verified through your github account.
+
+If you want to build and run the server locally, you will need:
 
 * Java Development Kit (JDK) 1.8 or higher.
 * Installed [git](https://git-scm.com/downloads) on your development machine.
@@ -49,20 +51,25 @@ server provides the following benefits:
 * If the REST API is updated, you do not need to update the client.
 
 
-### One-click deployment on railway
+### One-click deployment on Railway
 
-To quickly deploy the RTT demo server on Railway, you will need a [Railway](https://railway.app/) account verified through your github account. To start the deployment, click the following button and follow these steps:
+To quickly deploy the RTT demo server on Railway:
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/w9wI4Q?referralCode=NwYPaQ)
+1. Click the following button:
 
-1. Click on **Deploy Now**. You see a configuration form.
+    [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/w9wI4Q?referralCode=NwYPaQ)
 
-1. Fill in the `APP_ID`, `APP_CERTIFICATE`, `CUSTOMER_ID`, `CUSTOMER_SECRET`. 
+1. On the Railway deployment page, click **Deploy Now**. You see a serer configuration form.
 
-1. To specify your Object storage service (OSS), fill in the values for `OSS_ACCESS_KEY`, `OSS_SECRET_KEY`, and `OSS_BUCKET_NAME`.
+1. Fill in the `APP_ID`, `APP_CERTIFICATE`, `CUSTOMER_ID`, and `CUSTOMER_SECRET` from Agora Console. 
 
-1. To complete the deployment, click **Deploy**.
+1. To specify your object storage service (OSS), fill in the values for `OSS_ACCESS_KEY`, `OSS_SECRET_KEY`, and `OSS_BUCKET_NAME`.
 
+1. To complete the deployment, click **Deploy**. Railway creates a project instance and starts the build process. 
+
+1. Switch to the **Settings** tab and scroll down to **Domains**. Click on **Generate Domain** to expose the service to the public internet and copy the displayed url.
+
+1. To test your demo server, follow the steps in [Test your implementation](#test-your-implementation) but replace `https://localhost:80` with your Railway url.
 
 ### Build and run the demo business server
 
@@ -107,7 +114,7 @@ To test your business server, take the following steps:
     Execute the following command in a terminal window:
 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d "{\"UserId\": \"123\", \"channelName\": \"demo\"}" http://localhost:80/rttStart
+    curl -X POST -H "Content-Type: application/json" -d "{\"UserId\": \"123\", \"channelName\": \"demo\"}" https://localhost:80/rttStart
     ```
 
     The command makes an HTTP request to RTT within the JSON body. The body contains the following parameters:
@@ -122,7 +129,7 @@ To test your business server, take the following steps:
    Execute the following command in a terminal window:
 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" http://localhost:80/rttQuery
+    curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" https://localhost:80/rttQuery
     ```
     Your server retrieves the task ID and builder token for the task associated with the `channelName` specified in the request and sends a request to query the task status. You see the retrieved status displayed in the terminal.
 
@@ -132,7 +139,7 @@ To test your business server, take the following steps:
 
 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" http://localhost:80/rttStop
+    curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" https://localhost:80/rttStop
     ```
 
      Your server retrieves the task ID and builder token for the task associated with the `channelName` and sends a request to stop the task. You see a confirmation message displayed in the terminal.
