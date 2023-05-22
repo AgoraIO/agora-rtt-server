@@ -27,7 +27,7 @@ To use the RESTful API to transcribe speech, your server makes the following cal
 
 In order to deploy a demo Real-Time Transcription business server on [Railway](railway.app), you must have a [Railway](https://railway.app/) account verified through your github account.
 
-If you want to build and run the server locally, you will need:
+If you want to build and run the server locally, you will need to have:
 
 * Java Development Kit (JDK) 1.8 or higher.
 * Installed [git](https://git-scm.com/downloads) on your development machine.
@@ -61,7 +61,7 @@ To quickly deploy the RTT demo server on Railway:
 
 1. On the Railway deployment page, click **Deploy Now**. You see a serer configuration form.
 
-1. Fill in the `APP_ID`, `APP_CERTIFICATE`, `CUSTOMER_ID`, and `CUSTOMER_SECRET` from Agora Console. 
+1. Fill in the `APP_ID`, `APP_CERTIFICATE`, `CUSTOMER_ID`, and `CUSTOMER_SECRET` from [Agora Console](https://console.agora.io/). 
 
 1. To specify your object storage service (OSS), fill in the values for `OSS_ACCESS_KEY`, `OSS_SECRET_KEY`, and `OSS_BUCKET_NAME`.
 
