@@ -114,7 +114,7 @@ To test your business server, take the following steps:
     Execute the following command in a terminal window:
 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d "{\"UserId\": \"123\", \"channelName\": \"demo\"}" https://localhost:80/rttStart
+    curl -X POST -H "Content-Type: application/json" -d "{\"UserId\": \"123\", \"channelName\": \"demo\"}" http://localhost:80/rttStart
     ```
 
     The command makes an HTTP request to RTT within the JSON body. The body contains the following parameters:
@@ -129,7 +129,7 @@ To test your business server, take the following steps:
    Execute the following command in a terminal window:
 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" https://localhost:80/rttQuery
+    curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" http://localhost:80/rttQuery
     ```
     Your server retrieves the task ID and builder token for the task associated with the `channelName` specified in the request and sends a request to query the task status. You see the retrieved status displayed in the terminal.
 
@@ -139,7 +139,7 @@ To test your business server, take the following steps:
 
 
     ```bash
-    curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" https://localhost:80/rttStop
+    curl -X POST -H "Content-Type: application/json" -d "{\"channelName\": \"demo\"}" http://localhost:80/rttStop
     ```
 
      Your server retrieves the task ID and builder token for the task associated with the `channelName` and sends a request to stop the task. You see a confirmation message displayed in the terminal.
