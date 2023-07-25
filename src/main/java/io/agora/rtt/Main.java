@@ -5,7 +5,7 @@ import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpServer;
 
 public class Main {
-	public static int port = Integer.parseInt(System.getenv("PORT"));
+	public static int port = (System.getenv("PORT") != null) ? Integer.parseInt(System.getenv("PORT")) : 80;
 	public static void main(String[] args) {
 		// Start the http server
 		SimpleHttpServer httpServer = new SimpleHttpServer();
@@ -19,7 +19,6 @@ public class Main {
 			try {
 				server = HttpServer.create(new InetSocketAddress(port), 0);
 				System.out.println("RTT server started on port " + port);
-				System.out.println("App ID: " + System.getenv("APP_ID"));
 				server.createContext("/", new Handlers.RootHandler());
 				// Specify handlers for the Start, Query and Stop requests
 				server.createContext("/rttStart", new Handlers.StartHandler());
