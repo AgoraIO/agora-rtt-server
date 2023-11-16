@@ -38,8 +38,15 @@ public class Handlers {
 		@Override
 		public void handle(HttpExchange he) throws IOException {
 			// Handles requests sent to http://localhost:<port>
+			JSONObject jsonObj = getBodyJSON(he);
+			String channelName = (String) jsonObj.get("channelName");
+			int UserId = Integer.valueOf(jsonObj.get("UserId").toString()); 
 			String response = "<h1>Agora RTT Server Demo</h1>" + "<h2>Port: "
-					+ Main.port + "</h2>";
+					+ Main.port + "</h2>"
+					+ "<h2>channelName: "
+					+ channelName + "</h2>"
+					+ "<h2>UserId: "
+					+ UserId + "</h2>";
 			he.sendResponseHeaders(200, response.length());
 			OutputStream os = he.getResponseBody();
 			os.write(response.getBytes());
